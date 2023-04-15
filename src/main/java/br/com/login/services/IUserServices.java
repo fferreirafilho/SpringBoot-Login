@@ -1,0 +1,24 @@
+package br.com.login.services;
+
+
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import br.com.login.v1.dtos.UserDTO;
+
+@Service
+public interface IUserServices {
+
+	public Page<UserDTO> listAll(Pageable pageable);
+
+	public UserDTO findById(UUID id);
+	
+//	public UserDTO insert(RegisterRequest request);
+	
+	public UserDTO update(UUID id, UserDTO user);
+
+//	public UserDTO resetPassword(UUID id, @NotBlank String password);
+}
