@@ -40,7 +40,6 @@ public class AuthenticationServices implements IAuthenticationServices {
 
 		UsernamePasswordAuthenticationToken usernamePassworAuthenticationToken = new UsernamePasswordAuthenticationToken(
 				request.getEmail(), request.getPassword());
-
 		Authentication authenticate = this.authenticationManager.authenticate(usernamePassworAuthenticationToken);
 		UserModel usuario = (UserModel) authenticate.getPrincipal();
 		AuthTokenDTO token = new AuthTokenDTO(tokenService.getToken(usuario));

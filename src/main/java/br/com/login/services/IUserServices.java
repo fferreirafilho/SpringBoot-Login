@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.login.v1.dtos.InsertUserDTO;
 import br.com.login.v1.dtos.UserDTO;
 
 @Service
@@ -16,9 +17,9 @@ public interface IUserServices {
 
 	public UserDTO findById(UUID id);
 	
-//	public UserDTO insert(RegisterRequest request);
+	public UserDTO insert(InsertUserDTO request);
 	
 	public UserDTO update(UUID id, UserDTO user);
 
-//	public UserDTO resetPassword(UUID id, @NotBlank String password);
+	public UserDTO resetPassword(UUID id, String password);
 }

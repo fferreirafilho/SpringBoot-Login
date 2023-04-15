@@ -19,6 +19,6 @@ public interface IAccessGroupServices {
 
 	public AccessGroupDTO update(UUID id, AccessGroupDTO accessGroupDTO);
 
-//	public String delete(UUID id);
+	public String delete(UUID id);
 
 }

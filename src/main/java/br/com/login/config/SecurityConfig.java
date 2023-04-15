@@ -11,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import br.com.login.exceptions.handler.CustomizedResponseEntityExcpetionHandler;
 
@@ -18,24 +19,28 @@ import br.com.login.exceptions.handler.CustomizedResponseEntityExcpetionHandler;
 @EnableWebSecurity
 public class SecurityConfig {
 
+	private FilterToken filter;
+
+	public SecurityConfig(FilterToken filter) {
+		this.filter = filter;
+	}
+
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
 			throws Exception {
 		return authenticationConfiguration.getAuthenticationManager();
 	}
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
-
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		return http.csrf().disable().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+		return http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeHttpRequests()
-				
+
 				.requestMatchers("/api/v1/auth/*").permitAll()
 
 				.requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyAuthority("ROLE_PERSON", "ROLE_PERSON_READ")
@@ -50,10 +55,7 @@ public class SecurityConfig {
 
 				.requestMatchers(HttpMethod.GET, "/api/v1/roles/**").hasAnyAuthority("ROLE_ROLES_READ")
 
-				.and()
-				.exceptionHandling()
-					.accessDeniedHandler(new CustomizedResponseEntityExcpetionHandler())
-					.and().build();
+				.and().exceptionHandling().accessDeniedHandler(new CustomizedResponseEntityExcpetionHandler()).and()
+				.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class).build();
 	}
-
 }

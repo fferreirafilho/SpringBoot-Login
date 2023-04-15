@@ -22,8 +22,8 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import br.com.login.exceptions.InvalidDataException;
 import br.com.login.exceptions.InvalidOperationException;
-import br.com.login.exceptions.InvalidUserOperation;
 import br.com.login.exceptions.ResourceNotFoundException;
 import br.com.login.exceptions.StandardError;
 import br.com.login.exceptions.StandardErrorValidations;
@@ -39,22 +39,23 @@ public class CustomizedResponseEntityExcpetionHandler extends ResponseEntityExce
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		
 		String error = "Invalid Argument";
-
 		List<String> errorList = ex.getBindingResult().getFieldErrors().stream()
 				.map(fieldError -> fieldError.getDefaultMessage()).collect(Collectors.toList());
-
 		StandardErrorValidations err = new StandardErrorValidations(Instant.now(), status.value(), error, errorList,
 				((ServletWebRequest) request).getRequest().getRequestURI().toString());
+		
 		return ResponseEntity.status(status).body(err);
 	}
 
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response,
 			AccessDeniedException accessDeniedException) throws IOException, ServletException {
-		throw new AccessDeniedException("Access denied, you dont have permission to see this page");
+		
+		throw new AccessDeniedException("Access is denied for this resource, please contact administrator of system");
 	}
-//
+
 //	@ExceptionHandler(Exception.class)
 //	public final ResponseEntity<StandardError> handleAllExceptions(Exception e, HttpServletRequest request) {
 //
@@ -68,17 +69,6 @@ public class CustomizedResponseEntityExcpetionHandler extends ResponseEntityExce
 
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<StandardError> resourceNotFound(ResourceNotFoundException e, HttpServletRequest request) {
-
-		String error = "Resource not found";
-		HttpStatus status = HttpStatus.NOT_FOUND;
-		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
-				request.getRequestURI());
-
-		return ResponseEntity.status(status).body(err);
-	}
-
-	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<StandardError> resourceNotFound(IllegalArgumentException e, HttpServletRequest request) {
 
 		String error = "Resource not found";
 		HttpStatus status = HttpStatus.NOT_FOUND;
@@ -136,20 +126,9 @@ public class CustomizedResponseEntityExcpetionHandler extends ResponseEntityExce
 
 		return ResponseEntity.status(status).body(err);
 	}
-
-	@ExceptionHandler(AccessDeniedException.class)
-	public ResponseEntity<StandardError> badCredentials(AccessDeniedException e, HttpServletRequest request) {
-
-		String error = "Username or password incorrect";
-		HttpStatus status = HttpStatus.UNAUTHORIZED;
-		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
-				request.getRequestURI());
-
-		return ResponseEntity.status(status).body(err);
-	}
 	
-	@ExceptionHandler(InvalidUserOperation.class)
-	public ResponseEntity<StandardError> invalidOperation(InvalidUserOperation e, HttpServletRequest request) {
+	@ExceptionHandler(InvalidDataException.class)
+	public ResponseEntity<StandardError> invalidData(InvalidDataException e, HttpServletRequest request) {
 
 		String error = "Invalid operation, this user are not the same authenticated";
 		HttpStatus status = HttpStatus.FORBIDDEN;

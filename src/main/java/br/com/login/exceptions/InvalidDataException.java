@@ -1,10 +1,10 @@
 package br.com.login.exceptions;
 
-public class InvalidUserOperation extends RuntimeException {
+public class InvalidDataException extends RuntimeException {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public InvalidUserOperation(String string) {
+	public InvalidDataException(String string) {
 		super(string);
 	}
 

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,12 +68,12 @@ public class AccessGroupController {
 		logger.info("Update access group");
 		return ResponseEntity.ok().body(service.update(id, accessGroupDTO));
 	}
-//	
-//	@DeleteMapping(produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }, value = "/{id}")
-//	public ResponseEntity<DeleteResponse> delete(@PathVariable UUID id) {
-//		
-//		logger.info("delete access group");
-//		
-//		return ResponseEntity.ok().body(service.delete(id));
-//	}
+	
+	@DeleteMapping(produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }, value = "/{id}")
+	public ResponseEntity<String> delete(@PathVariable UUID id) {
+		
+		logger.info("delete access group");
+		
+		return ResponseEntity.ok().body(service.delete(id));
+	}
 }

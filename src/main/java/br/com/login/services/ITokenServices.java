@@ -8,4 +8,5 @@ import br.com.login.v1.models.UserModel;
 public interface ITokenServices {
 
 	public String getToken(UserModel user);
+	public String getSubject(String token);
 }
