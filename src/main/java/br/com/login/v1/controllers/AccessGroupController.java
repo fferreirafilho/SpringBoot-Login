@@ -40,20 +40,25 @@ public class AccessGroupController {
 	@GetMapping(produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public ResponseEntity<Page<AccessGroupDTO>> findAll(
 			@PageableDefault(page = 0, size = 1, sort = "id", direction = Direction.ASC) Pageable pageable) {
-		logger.info("Find all");
+		
+		logger.warn("Find all access groups");
+		
 		return ResponseEntity.ok().body(service.listAll(pageable));
 	}
 
 	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public ResponseEntity<AccessGroupDTO> findById(@PathVariable(value = "id") String id) {
-		logger.info("Find one");
+		
+		logger.warn("Find one access group");
+		
 		return ResponseEntity.ok().body(service.findById(UUID.fromString(id)));
 	}
 
 	@PostMapping(produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }, consumes = {
 			MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public ResponseEntity<AccessGroupDTO> insert(@Valid @RequestBody AccessGroupDTO accessGroupDTO) {
-		logger.info("Insert one");
+		
+		logger.warn("Insert one access group");
 
 		accessGroupDTO = service.insert(accessGroupDTO);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(accessGroupDTO.getId())
@@ -63,16 +68,17 @@ public class AccessGroupController {
 	
 	@PutMapping(produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }, consumes = {
 			MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }, value = "/{id}")
-	public ResponseEntity<AccessGroupDTO> update(@PathVariable UUID id,@Valid @RequestBody AccessGroupDTO accessGroupDTO) {
+	public ResponseEntity<AccessGroupDTO> update(@PathVariable UUID id, @Valid @RequestBody AccessGroupDTO accessGroupDTO) {
 		
-		logger.info("Update access group");
+		logger.warn("Update access group");
+		
 		return ResponseEntity.ok().body(service.update(id, accessGroupDTO));
 	}
 	
 	@DeleteMapping(produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }, value = "/{id}")
 	public ResponseEntity<String> delete(@PathVariable UUID id) {
 		
-		logger.info("delete access group");
+		logger.warn("delete access group");
 		
 		return ResponseEntity.ok().body(service.delete(id));
 	}

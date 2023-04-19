@@ -33,13 +33,17 @@ public class RoleController {
 	@GetMapping(produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public ResponseEntity<Page<RoleDTO>> findAll(
 			@PageableDefault(page = 0, size = 1, sort = "id", direction = Direction.ASC) Pageable pageable) {
-		logger.info("Find all");
+		
+		logger.warn("Find all roles");
+		
 		return ResponseEntity.ok().body(service.listAll(pageable));
 	}
 	
 	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public ResponseEntity<RoleDTO> findById(@PathVariable(value = "id") String id) {
-		logger.info("Find one");
+		
+		logger.warn("Find one role");
+		
 		return ResponseEntity.ok().body(service.findById(UUID.fromString(id)));
 	}
 }

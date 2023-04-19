@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,13 +13,14 @@ public class UserDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private UUID id;
-	@NotBlank(message = "Field name cannot null")
+	@NotBlank(message = "Name cannot null")
 	private String name;
-	@NotBlank(message = "Field username cannot null")
+	@NotBlank(message = "Username cannot null")
+	@Email(message = "Username must be a valid email")
 	private String username;
-	@NotNull(message = "Field access group cannot null")
+	@NotNull(message = "Access group cannot null")
 	private AccessGroupDTO accessGroup;
-	@NotNull(message = "Field enabled cannot null")
+	@NotNull(message = "Enabled cannot null")
 	private Boolean enabled;
 
 	public UserDTO() {

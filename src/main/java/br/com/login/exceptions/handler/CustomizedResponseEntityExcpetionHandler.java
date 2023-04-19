@@ -39,21 +39,23 @@ public class CustomizedResponseEntityExcpetionHandler extends ResponseEntityExce
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-		
+
 		String error = "Invalid Argument";
 		List<String> errorList = ex.getBindingResult().getFieldErrors().stream()
 				.map(fieldError -> fieldError.getDefaultMessage()).collect(Collectors.toList());
 		StandardErrorValidations err = new StandardErrorValidations(Instant.now(), status.value(), error, errorList,
 				((ServletWebRequest) request).getRequest().getRequestURI().toString());
-		
+
 		return ResponseEntity.status(status).body(err);
 	}
 
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response,
 			AccessDeniedException accessDeniedException) throws IOException, ServletException {
-		
-		throw new AccessDeniedException("Access is denied for this resource, please contact administrator of system");
+
+		String route = "/acess-denied" + request.getRequestURI();
+		System.out.println(route);
+		response.sendRedirect(route);
 	}
 
 //	@ExceptionHandler(Exception.class)
@@ -126,7 +128,7 @@ public class CustomizedResponseEntityExcpetionHandler extends ResponseEntityExce
 
 		return ResponseEntity.status(status).body(err);
 	}
-	
+
 	@ExceptionHandler(InvalidDataException.class)
 	public ResponseEntity<StandardError> invalidData(InvalidDataException e, HttpServletRequest request) {
 

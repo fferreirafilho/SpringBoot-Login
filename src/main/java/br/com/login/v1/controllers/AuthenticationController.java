@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import br.com.login.services.IAuthenticationServices;
 import br.com.login.v1.dtos.AuthDataDTO;
 import br.com.login.v1.dtos.AuthTokenDTO;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/api/v1/auth")
@@ -26,7 +27,7 @@ public class AuthenticationController {
 //	}
 
 	@PostMapping("/authenticate")
-	public ResponseEntity<AuthTokenDTO> authenticate(@RequestBody AuthDataDTO request) {
+	public ResponseEntity<AuthTokenDTO> authenticate(@RequestBody @Valid AuthDataDTO request) {
 		return ResponseEntity.ok(service.authenticate(request));
 	}
 

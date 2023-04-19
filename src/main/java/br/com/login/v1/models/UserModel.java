@@ -109,10 +109,6 @@ public class UserModel implements UserDetails, Serializable {
 		this.name = name;
 	}
 
-	public Boolean getEnabled() {
-		return enabled;
-	}
-
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}

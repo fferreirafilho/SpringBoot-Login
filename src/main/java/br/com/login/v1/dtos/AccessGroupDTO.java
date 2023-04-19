@@ -12,9 +12,9 @@ public class AccessGroupDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	private UUID id;
-	@NotBlank(message = "Field name cannot empty")
+	@NotBlank(message = "Name cannot empty")
 	private String name;
-	@NotNull(message = "Field roles cannot null")
+	@NotNull(message = "List roles cannot null")
 	private List<RoleDTO> roles;
 
 	public AccessGroupDTO() {

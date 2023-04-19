@@ -14,6 +14,10 @@ import br.com.login.v1.dtos.UserDTO;
 public interface IUserServices {
 
 	public Page<UserDTO> listAll(Pageable pageable);
+	
+	public Page<UserDTO> active(Pageable pageable);
+	
+	public Page<UserDTO> disabled(Pageable pageable);
 
 	public UserDTO findById(UUID id);
 	

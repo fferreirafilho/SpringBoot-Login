@@ -25,14 +25,14 @@ public class SecurityConfig {
 		this.filter = filter;
 	}
 
-	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-			throws Exception {
-		return authenticationConfiguration.getAuthenticationManager();
-	}
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
 	@Bean
-	public PasswordEncoder passwordEncoder() {
+	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
@@ -41,7 +41,9 @@ public class SecurityConfig {
 		return http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeHttpRequests()
 
-				.requestMatchers("/api/v1/auth/*").permitAll()
+				.requestMatchers("/api/v1/auth/**").permitAll()
+				.requestMatchers("/acess-denied/**").permitAll()
+				.requestMatchers("/acess-denied").permitAll()
 
 				.requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyAuthority("ROLE_PERSON", "ROLE_PERSON_READ")
 				.requestMatchers(HttpMethod.POST, "/api/v1/users/**").hasAnyAuthority("ROLE_PERSON")
@@ -54,7 +56,8 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.DELETE, "/api/v1/groups/**").hasAnyAuthority("ROLE_GROUP")
 
 				.requestMatchers(HttpMethod.GET, "/api/v1/roles/**").hasAnyAuthority("ROLE_ROLES_READ")
-
+				
+				.anyRequest().denyAll()
 				.and().exceptionHandling().accessDeniedHandler(new CustomizedResponseEntityExcpetionHandler()).and()
 				.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class).build();
 	}

@@ -2,6 +2,7 @@ package br.com.login.config;
 
 import java.io.IOException;
 
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,11 +40,15 @@ public class FilterToken extends OncePerRequestFilter {
 			token = authorizationHeader.replace("Bearer ", "");
 			String subject = this.tokenService.getSubject(token);
 			UserModel user = this.userRepository.findByUsername(subject).get();
-			Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
+			
+			if(user.isEnabled() == false) {
+				throw new DisabledException("User is disabled");
+			}
+			
+			Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(),
+					user.getPassword(), user.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-
 		}
-
 		filterChain.doFilter(request, response);
 	}
 }
